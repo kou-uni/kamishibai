@@ -143,7 +143,8 @@ function init(cfg){
   </div>
   <div class="nav">
     <button class="gbtn" id="k-gbtn" aria-expanded="false" aria-controls="k-talkwrap" aria-label="解説を見る">
-      ${cfg.guide?.loop ? '<video class="charSm" id="k-charsm" autoplay loop muted playsinline disablepictureinpicture aria-hidden="true"></video>' : '<span class="face">◆</span>'}
+      ${cfg.guide?.loop ? '<video class="charSm" id="k-charsm" autoplay loop muted playsinline disablepictureinpicture aria-hidden="true"></video>'
+        : cfg.guide?.face ? '<img class="charSm" id="k-charface" alt="">' : '<span class="face">◆</span>'}
       <span class="badge">?</span></button>
     <button class="btn" id="k-prev">${esc(cfg.labels?.prev||'もどる')}</button>
     <button class="btn go" id="k-next">${esc(cfg.labels?.next||'つぎへ')}</button>
@@ -161,7 +162,9 @@ function init(cfg){
         charSm = document.getElementById('k-charsm');
 
   if(charImg && cfg.guide?.still) charImg.src = cfg.guide.still;
-  if(charSm && cfg.guide?.loop){ charSm.src = cfg.guide.loop; if(cfg.guide.still) charSm.poster = cfg.guide.still; charSm.play().catch(()=>{}); }
+  const charFace = document.getElementById('k-charface');
+  if(charFace && cfg.guide?.face) charFace.src = cfg.guide.face;
+  if(charSm && cfg.guide?.loop){ charSm.src = cfg.guide.loop; const po = cfg.guide.face || cfg.guide.still; if(po) charSm.poster = po; charSm.play().catch(()=>{}); }
 
   const body = s => s.cover
     ? `<div class="cover"><div class="num">${esc(s.cover.num)}</div><div class="ttl">${esc(s.cover.title)}</div>${s.cover.sub?`<div class="sub">${esc(s.cover.sub)}</div>`:''}</div>`

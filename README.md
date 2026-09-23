@@ -87,11 +87,12 @@ Node さえあれば動きます（依存パッケージ 0）。できた `dist/
 ## ガイドのキャラクター
 
 ```js
-guide: { still: '@@assets/guide.png@@', loop: '@@assets/guide-loop.mp4@@' }
+guide: { still: '@@assets/guide.png@@', face: '@@assets/guide-face.png@@', loop: '@@assets/guide-loop.mp4@@' }
 ```
 
 - `still` … 背景を抜いたPNG。吹き出しから飛び出す大きい絵
-- `loop` … 丸ボタン用の短い動画（省略可。無ければ ◆ が出ます）
+- `face` … 丸ボタン用の静止画（顔まわりを正方形に切ったもの。省略可）
+- `loop` … 丸ボタン用の短い動画（省略可。`face` より優先。どちらも無ければ ◆）
 
 引用符で囲んだ `@@パス@@` は、**ビルド時に data URI として埋め込まれます。** だから1枚で完結します。
 
