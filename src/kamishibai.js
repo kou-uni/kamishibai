@@ -223,6 +223,40 @@ function init(cfg){
   document.addEventListener('click', e => {
     const a = e.target.closest && e.target.closest('a.tdo');
     if(a){ chime('tap'); burst(a, 8, 200); } }, true);
+  /* ---------- 左右スワイプ ---------- */
+  (function(){
+    let x0=null, y0=null, t0=0, lock=false;
+    const on=(t,f)=>document.addEventListener(t,f,{passive:true});
+    const reset=()=>{ x0=null;
+      stage.style.transition='transform .28s cubic-bezier(.2,.8,.3,1)';
+      stage.style.transform=''; };
+    on('touchstart', e=>{
+      if(e.touches.length!==1){ x0=null; return; }
+      const t=e.touches[0];
+      x0=t.clientX; y0=t.clientY; t0=Date.now(); lock=false;
+      stage.style.transition='none';
+    });
+    on('touchmove', e=>{
+      if(x0===null || e.touches.length!==1) return;
+      const t=e.touches[0], dx=t.clientX-x0, dy=t.clientY-y0;
+      if(!lock && Math.abs(dx)>14 && Math.abs(dx)>Math.abs(dy)*1.4) lock=true;
+      if(lock){
+        const edge = (dx<0 && bNext.disabled) || (dx>0 && bPrev.disabled);
+        stage.style.transform=`translateX(${dx*(edge?0.09:0.3)}px)`;
+      }
+    });
+    on('touchend', e=>{
+      if(x0===null) return;
+      const t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0, dt=Date.now()-t0;
+      const go = lock && dt<800 && Math.abs(dx)>=58 && Math.abs(dx)>Math.abs(dy)*1.4;
+      reset();
+      if(!go) return;
+      if(dx<0){ if(!bNext.disabled) bNext.click(); }
+      else if(!bPrev.disabled) bPrev.click();
+    });
+    on('touchcancel', reset);
+  })();
+
   addEventListener('keydown', e => {
     if(e.key === 'ArrowRight' || e.key === ' ') { bNext.disabled || bNext.click(); }
     if(e.key === 'ArrowLeft') { bPrev.disabled || bPrev.click(); } });
