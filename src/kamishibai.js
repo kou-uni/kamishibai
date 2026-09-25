@@ -41,16 +41,54 @@ const K = {
 };
 
 /* ========== 音（Web Audio でその場で合成。音源ファイルは要らない） ========== */
-let AC = null, soundOn = true;
+let AC = null, soundOn = true, voice = 'soft';
 const SEQ = {
   next:[1046.5,1318.5,1568,2093], fin:[1046.5,1318.5,1568,2093,2637],
   tap:[1568,2093,2637], open:[1318.5,1760], back:[880,659.3]
 };
+/* ぴこぴこ（sound:'chip'）。矩形波・単音・短いゲート・余韻なし。
+   ゲーム機の効果音の作り: 音を重ねず、切るときはスパッと切る。 */
+const CHIP = {
+  next:[1046.5,1318.5,1568,2093], fin:[784,1046.5,1318.5,1568,2093,2637,3136],
+  tap:[1568,3136], open:[1318.5,2637], back:[1318.5,880]
+};
+function chipChime(kind){
+  const t0 = AC.currentTime + 0.01, master = AC.createGain();
+  master.gain.value = 0.06; master.connect(AC.destination);      /* 矩形波は大きいので絞る */
+  const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200;
+  lp.connect(master);                                            /* 高域の刺さりだけ落とす */
+  const seq = CHIP[kind] || CHIP.next;
+  const step = kind === 'fin' ? 0.07 : kind === 'tap' ? 0.045 : 0.06;
+  const gate = step * 0.8;                                       /* 音の間に一瞬の無音 ＝ ぴこぴこ感 */
+  seq.forEach((f, i) => {
+    const t = t0 + i * step;
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = 'square'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(1, t + 0.002);                /* 立ち上がりは即 */
+    g.gain.setValueAtTime(1, t + gate - 0.012);
+    g.gain.linearRampToValueAtTime(0.0001, t + gate);            /* 余韻なし、スパッと */
+    o.connect(g); g.connect(lp); o.start(t); o.stop(t + gate + 0.01);
+  });
+  if(kind === 'fin'){                                            /* 最後だけ、和音で「ジャン」 */
+    const t = t0 + seq.length * step;
+    [2093, 2637, 3136].forEach(f => {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = 'square'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.7, t + 0.002);
+      g.gain.setValueAtTime(0.7, t + 0.22);
+      g.gain.linearRampToValueAtTime(0.0001, t + 0.26);
+      o.connect(g); g.connect(lp); o.start(t); o.stop(t + 0.28);
+    });
+  }
+}
 function chime(kind){
   if(!soundOn) return;
   try{
     AC = AC || new (global.AudioContext || global.webkitAudioContext)();
     if(AC.state === 'suspended') AC.resume();
+    if(voice === 'chip'){ chipChime(kind); return; }
     const t0 = AC.currentTime + 0.01, master = AC.createGain();
     master.gain.value = 0.15; master.connect(AC.destination);
     const seq = SEQ[kind] || SEQ.next;
@@ -124,6 +162,7 @@ function init(cfg){
   const CH = cfg.chapters || [''];
   if(!S.length) throw new Error('kamishibai: steps が空です');
   soundOn = cfg.sound !== false;
+  voice = cfg.sound === 'chip' ? 'chip' : 'soft';   /* true なら従来の音 */
 
   document.body.insertAdjacentHTML('afterbegin', `
 <div id="fx" aria-hidden="true"></div>
