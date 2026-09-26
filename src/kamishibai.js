@@ -242,8 +242,13 @@ function init(cfg){
     bNext.textContent = cur === S.length - 1 ? (cfg.labels?.end || 'おわり！')
                       : (S[cur].cover ? (cfg.labels?.start || 'はじめる') : (cfg.labels?.next || 'つぎへ'));
     bNext.disabled = cur === S.length - 1;
+    /* 解説を開いたまま送れる。開いていたら次の画面の解説に差し替え、閉じていたら閉じたまま。
+       毎回閉じると、解説を読みながら進みたい人が1画面ごとに◆を押し直すことになる。 */
+    const wasOpen = !wrap.hidden;
     talkT.innerHTML = S[cur].talk || '';
-    wrap.hidden = true; gbtn.setAttribute('aria-expanded','false');
+    const keep = wasOpen && !!S[cur].talk;          /* 解説の無い画面では閉じる */
+    wrap.hidden = !keep; gbtn.setAttribute('aria-expanded', String(keep));
+    if(keep){ wrap.style.animation='none'; void wrap.offsetWidth; wrap.style.animation=''; }
     global.scrollTo({top:0, behavior:'instant'});
     const el = document.getElementById('k-st' + cur);
     el.querySelectorAll('[data-to]').forEach(countUp);
