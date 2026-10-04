@@ -4,11 +4,12 @@
 
 ```js
 const CONTENT = {
+  theme:    'cool',                                 // 省略可。黒背景のトーン（docs/themes.md）
   brand:    { name:'紙芝居', sub:'KAMISHIBAI' },   // 左上の名前
   guide:    { still:'@@assets/guide.png@@',        // 飛び出す絵（背景を抜いたPNG）
               face: '@@assets/guide-face.png@@',    // 丸ボタン用の静止画（省略可）
               loop: '@@assets/guide-loop.mp4@@' },  // 丸ボタンの動画（省略可・face より優先）
-  sound:    true,                                   // false で音を切る／'chip' でぴこぴこ（矩形波）
+  sound:    true,                                   // false で切る／'chip' ぴこぴこ／'cool' 低く短い音
   chapters: ['序','1','2','終'],                    // 上のバーの区切り
   labels:   { next:'つぎへ', prev:'もどる', start:'はじめる', end:'おわり！' },
   steps:    [ /* 1画面 = 1オブジェクト */ ],
