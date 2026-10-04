@@ -1,0 +1,134 @@
+/* fonts: https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap */
+/* ════════════════════════════════════════════════════════════════
+   theme: cool — 黒背景・細い書体・差し色1つ
+   content に theme:'cool' と書くと、基本の CSS のあとにこれが足される。
+
+   決まりは4つ。
+   1. 色は 黒・白・グレー・差し色1つ（--acc）だけ。緑と赤は使わない
+   2. 面は白くしない。背景より少し明るいグレーにして、細い線で分ける
+   3. 白い面は「押すもの」（つぎへ）にだけ使う
+   4. 書体は細く。太字は 500 まで。動き続ける演出（揺れ・跳ね・星）は止める
+
+   差し色を変えるときは、extra.css で --acc と --accFill の2つを上書きする。
+   ════════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#08090A; --line:#1F2126; --line2:#34373E; --mute:#62666D;
+  --acc:#8B93FF;      /* 文字と細い線に使う差し色 */
+  --accFill:#5E6AD2;  /* 面を塗るときの差し色（--acc より一段暗い） */
+
+  --sky1:#08090A; --sky2:#08090A; --sky3:#08090A;
+  --blue:#8B93FF; --blued:#FFFFFF; --blueL:#191B2E;
+  --grass:#F7F8F8; --grassL:#16181D;
+  --yel:#8B93FF; --yelL:#191B2E; --yelD:#B9BEFF;
+  --red:#62666D; --redL:#16181D;
+  --pur:#8B93FF; --purL:#191B2E;
+  --ora:#8B93FF;
+  --card:#0F1011; --ink:#F7F8F8; --ink2:#9A9FA8; --ink3:#62666D;
+  --sh:0 0 0 1px var(--line); --shS:0 0 0 1px var(--line);
+}
+body{
+  background:
+    radial-gradient(1000px 560px at 80% -12%,color-mix(in srgb,var(--accFill) 26%,transparent),transparent 62%),
+    var(--bg);
+  background-attachment:fixed;
+  font-family:"Geist","Zen Kaku Gothic New","Hiragino Sans","Helvetica Neue",sans-serif;
+  letter-spacing:.01em;
+}
+.cloud{display:none}
+#fx{display:none}   /* 星の瞬きは出さない */
+
+/* ── 書体の太さ：基本 400、強調 500、大きい数字だけ 300 ──
+   !important で一括しているので、extra.css で太さを変えるときも !important が要る */
+body *{font-weight:400!important}
+b,strong,.brand,.btn,.pagetag,.cover .num,.card .k,.card .v,.goal .gt,.tdo .tt,.quote p,
+.bubble p,.bubble .tag,.who b,.rc .nm,.pill,.tdo .lk{font-weight:500!important}
+.big,.cover .ttl,.callout .l2{font-weight:500!important;letter-spacing:-.035em}
+.num .n{font-weight:300!important;letter-spacing:-.05em}
+
+/* ── 上のバー ── */
+.top{background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line);border-radius:0;box-shadow:none}
+.brand{font-family:"Geist","Zen Kaku Gothic New",sans-serif;font-size:17px;letter-spacing:-.01em;color:#fff}
+.brand i{font-family:"Geist",sans-serif;color:var(--ink3)}
+.chap .b{height:3px;background:var(--line2);border-radius:2px}
+.chap .b.done{background:#fff}
+.chap .b.on{background:var(--acc);box-shadow:none;transform:none}
+.stepn{color:var(--ink3);font-family:"Geist",sans-serif}
+.mute{background:transparent;filter:grayscale(1) brightness(1.6);opacity:.7}
+
+/* ── 章の扉：左寄せ。num は小さな肩書き、ttl が主役 ── */
+.cover{text-align:left;padding-block:10px 18px}
+.cover .num{font-family:"Geist","Zen Kaku Gothic New",sans-serif;letter-spacing:.02em;
+  font-size:clamp(20px,3vw,26px);line-height:1.2;color:var(--acc);text-shadow:none;animation:none;
+  background:none;box-shadow:none;border:0;padding:0;border-radius:0;display:block;text-wrap:balance}
+.cover .ttl{line-height:1.08;font-size:clamp(46px,11vw,104px);margin-top:14px;color:#fff}
+.cover .sub{color:var(--ink2);margin-top:18px;text-wrap:balance}
+
+/* ── ラベルと見出し ── */
+.pagetag{background:transparent;box-shadow:none;padding:0;border-radius:0;color:var(--ink3);
+  letter-spacing:.02em;margin-bottom:18px;white-space:normal}
+.pagetag::before{content:"";display:inline-block;width:18px;height:2px;background:var(--acc);
+  vertical-align:middle;margin-right:10px}
+.big{line-height:1.16;color:#fff;margin-bottom:22px}
+.big em,.big .o,.big .mark,.big .r,.big .no{color:var(--acc);text-shadow:none}
+.say{color:var(--ink2)} .say b{color:#fff}
+.tiny{color:var(--ink3)} .tiny a{color:var(--acc)}
+
+/* ── 箱：平たく、細い線で ── */
+.card,.num,.quote,.memo,.goal,.tdo,.panel,.who,.rc{border-radius:14px}
+.card .k{background:none;padding:0;color:var(--acc);letter-spacing:.08em;margin-bottom:8px}
+.card .v{color:#fff;letter-spacing:-.02em}
+.num .n{color:#fff}
+.num.ok .n{color:#F7F8F8} .num.dn .n,.num.st .n{color:var(--mute)}   /* 良い=白、悪い=グレー */
+.quote{border-left:2px solid var(--acc)} .quote p{color:#fff}
+.memo{border-left:2px solid var(--acc)} .memo b{color:#fff}
+.goal .medal,.tdo .no,.who .av,.rc .av{background:transparent!important;border:1.5px solid var(--line2);color:#fff;
+  box-shadow:none;animation:none;font-family:"Geist",sans-serif}
+.goal .gt,.tdo .tt{color:#fff;letter-spacing:-.01em}
+.tdo .lk{background:var(--accFill)}
+.pill,.pill.no,.pill.yes{background:#16181D;color:var(--ink2);box-shadow:0 0 0 1px var(--line)}
+.pill.yes{color:#fff}
+.rule{background:var(--line);height:1px}
+.rc.lead{box-shadow:0 0 0 1px var(--accFill)}
+.rc .nm{color:#fff} .rc li b{color:#fff}
+.entrust{background:#16181D;color:#fff;border-radius:12px}
+.fact{background:#16181D;color:var(--acc);border-radius:12px}
+
+/* ── 問いかけと締め ── */
+.bubble{background:var(--card);color:#fff;border-radius:14px;box-shadow:0 0 0 1px var(--accFill);animation:none}
+.bubble::before{display:none}
+.bubble .tag{background:none;padding:0;color:var(--acc);letter-spacing:.08em}
+.bubble ul{color:var(--ink2)}
+.callout,.together{background:none;box-shadow:none;border-top:1px solid var(--line);border-radius:0;color:#fff;
+  text-align:left;padding:28px 0 0;animation:none}
+.callout .l1{color:var(--ink2)}
+.callout .l2{font-size:clamp(34px,8vw,72px);line-height:1.15}
+
+/* ── 下の操作：白い面は「つぎへ」だけ ── */
+.guide{background:linear-gradient(to top,var(--bg) 58%,color-mix(in srgb,var(--bg) 88%,transparent) 82%,transparent)}
+.btn{background:#14161B;color:#fff;box-shadow:0 0 0 1px var(--line2);border-radius:12px}
+.btn:active{box-shadow:0 0 0 1px var(--line2)}
+.btn.go{background:#fff;color:#000;box-shadow:none;animation:none}
+.btn.go:active{box-shadow:none}
+.gbtn{background:#14161B;box-shadow:0 0 0 1px var(--line2)}
+.gbtn .badge{background:var(--accFill);color:#fff;box-shadow:none;animation:none}
+.charSm,.gbtn .face{animation:none}
+/* 黒地でキャラクターが沈まないよう、細い白の縁と差し色の光を足す */
+.char{filter:drop-shadow(0 0 1px rgba(255,255,255,.75))
+             drop-shadow(0 0 22px color-mix(in srgb,var(--accFill) 55%,transparent))}
+
+/* ── 解説の面：背景より一段明るい半透明のグレー（すりガラス） ── */
+.talk{
+  background:rgba(30,32,38,.78);
+  -webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.10),inset 0 1px 0 rgba(255,255,255,.10),0 24px 60px rgba(0,0,0,.55);
+  border-radius:16px;padding:20px 24px;
+  scrollbar-width:thin;scrollbar-color:#3A3D45 transparent}
+.talk::after{display:none}
+.talk::-webkit-scrollbar{width:6px}
+.talk::-webkit-scrollbar-thumb{background:#3A3D45;border-radius:6px}
+.talk .t{color:#B4B8C0;font-size:19px;line-height:1.8}
+.talk .t b{color:#fff}
+.talk .t::before{content:"NOTE";display:block;font-family:"Geist",sans-serif;font-size:12px;letter-spacing:.18em;
+  color:var(--acc);margin-bottom:8px}
+@media(min-width:700px){.talk .t{font-size:22px}}
+.gbtn .face{background:#14161B;color:var(--acc)}

@@ -23,6 +23,19 @@ let content = read(src);
 const extraPath = src.replace(/\.js$/, '.extra.css');
 const extra = existsSync(resolve(root, extraPath)) ? '\n/* --- content 固有 --- */\n' + read(extraPath) : '';
 
+/* テーマ: content に theme:'cool' とあれば src/themes/cool.css を、基本の CSS と extra の間に足す。
+   テーマ CSS の1行目が「fonts: URL」のコメントなら、その書体も読み込む */
+const theme = (content.match(/\btheme\s*:\s*['"`]([a-z0-9-]+)['"`]/) || [])[1];
+let themeCss = '', themeFonts = '';
+if(theme){
+  const tp = `src/themes/${theme}.css`;
+  if(!existsSync(resolve(root, tp))){ console.error(`⚠️  テーマが見つかりません: ${theme}（${tp}）`); process.exit(1); }
+  const t = read(tp);
+  themeCss = `\n/* --- theme: ${theme} --- */\n` + t;
+  const f = t.match(/^\/\*\s*fonts:\s*(\S+)\s*\*\//);
+  if(f) themeFonts = `<link rel="stylesheet" href="${f[1]}">\n`;
+}
+
 /* アセットを data URI に */
 let embedded = 0;
 content = content.replace(/["'`]@@([^@]+)@@["'`]/g, (_, p) => {
@@ -38,7 +51,8 @@ const title = (content.match(/title\s*:\s*['"`](.+?)['"`]/) || [,'紙芝居'])[1
 
 const html = read('src/shell.html')
   .replace('__TITLE__', title)
-  .replace('__CSS__', () => read('src/kamishibai.css') + extra)
+  .replace('<style>', () => themeFonts + '<style>')
+  .replace('__CSS__', () => read('src/kamishibai.css') + themeCss + extra)
   .replace('__ENGINE__', () => read('src/kamishibai.js'))
   .replace('__CONTENT__', () => content);
 

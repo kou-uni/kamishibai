@@ -83,12 +83,31 @@ function chipChime(kind){
     });
   }
 }
+/* 低く短い音（sound:'cool'）。サイン波を下げながら切る「トッ」。
+   高い音を重ねない。鳴っていることに気づかないくらいが丁度いい。 */
+function coolChime(kind){
+  const tone = (f0, f1, t, dur, vol, type) => {
+    const o = AC.createOscillator(), g = AC.createGain(), lp = AC.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 2400;
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(lp); lp.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + 0.02);
+  };
+  const t = AC.currentTime + 0.005;
+  if(kind === 'back')      tone(260, 150, t, 0.10, 0.20);
+  else if(kind === 'open' || kind === 'tap'){ tone(520, 520, t, 0.07, 0.10); tone(780, 780, t + 0.06, 0.10, 0.09); }
+  else if(kind === 'fin')  [110, 164.8, 220, 329.6].forEach((f, i) => tone(f, f, t + i * 0.012, 1.4, 0.11));
+  else { tone(420, 210, t, 0.09, 0.22); tone(1800, 900, t, 0.03, 0.05, 'triangle'); }
+}
 function chime(kind){
   if(!soundOn) return;
   try{
     AC = AC || new (global.AudioContext || global.webkitAudioContext)();
     if(AC.state === 'suspended') AC.resume();
     if(voice === 'chip'){ chipChime(kind); return; }
+    if(voice === 'cool'){ coolChime(kind); return; }
     const t0 = AC.currentTime + 0.01, master = AC.createGain();
     master.gain.value = 0.15; master.connect(AC.destination);
     const seq = SEQ[kind] || SEQ.next;
@@ -162,7 +181,9 @@ function init(cfg){
   const CH = cfg.chapters || [''];
   if(!S.length) throw new Error('kamishibai: steps が空です');
   soundOn = cfg.sound !== false;
-  voice = cfg.sound === 'chip' ? 'chip' : 'soft';   /* true なら従来の音 */
+  /* 'chip' / 'cool' / 'soft' は名指し。true（または省略）なら、テーマ cool では 'cool'、ほかは従来の音 */
+  voice = ['chip','cool','soft'].includes(cfg.sound) ? cfg.sound : (cfg.theme === 'cool' ? 'cool' : 'soft');
+  if(cfg.theme) document.documentElement.dataset.theme = cfg.theme;
 
   document.body.insertAdjacentHTML('afterbegin', `
 <div id="fx" aria-hidden="true"></div>
