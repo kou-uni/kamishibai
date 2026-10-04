@@ -1,134 +1,148 @@
-/* fonts: https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap */
+/* fonts: https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=DotGothic16&display=swap */
 /* ════════════════════════════════════════════════════════════════
-   theme: cool — 黒背景・細い書体・差し色1つ
-   content に theme:'cool' と書くと、基本の CSS のあとにこれが足される。
-
-   決まりは4つ。
-   1. 色は 黒・白・グレー・差し色1つ（--acc）だけ。緑と赤は使わない
-   2. 面は白くしない。背景より少し明るいグレーにして、細い線で分ける
-   3. 白い面は「押すもの」（つぎへ）にだけ使う
-   4. 書体は細く。太字は 500 まで。動き続ける演出（揺れ・跳ね・星）は止める
-
-   差し色を変えるときは、extra.css で --acc と --accFill の2つを上書きする。
+   theme: cool — ベタ塗りの色面・巨大な見出し・古い OS の窓
+   手本は typesafe.ai。決まりは5つ。
+   1. 背景は1色のベタ塗り。章ごとに色を替える（白・灰緑・桃・青緑・紫紅）。グラデーションは使わない
+   2. 文字は墨色1色。色で強調しない。見出しの強調は下線、ラベルは白黒反転、本文の強調は朱色のマーカー
+   3. 見出しは巨大に、字間も行間も詰めて、中央寄せ。扉の題名は必ず1行
+   4. 箱は「窓」：角は直角、1px の黒い線、黒いタイトルバーに等幅の白文字、硬い影
+   5. 小さい字（ラベル・注記・日付）は等幅。選んだもの・押したものは紫紅になる
+   章ごとの色は content の tones:['white','sage','teal','pink','magenta'] で決める（省くと順に回る）。
+   （2026-10-05 までの cool は黒背景・藍1色だった。git の 4b4007a にある）
    ════════════════════════════════════════════════════════════════ */
 :root{
-  --bg:#08090A; --line:#1F2126; --line2:#34373E; --mute:#62666D;
-  --acc:#8B93FF;      /* 文字と細い線に使う差し色 */
-  --accFill:#5E6AD2;  /* 面を塗るときの差し色（--acc より一段暗い） */
-
-  --sky1:#08090A; --sky2:#08090A; --sky3:#08090A;
-  --blue:#8B93FF; --blued:#FFFFFF; --blueL:#191B2E;
-  --grass:#F7F8F8; --grassL:#16181D;
-  --yel:#8B93FF; --yelL:#191B2E; --yelD:#B9BEFF;
-  --red:#62666D; --redL:#16181D;
-  --pur:#8B93FF; --purL:#191B2E;
-  --ora:#8B93FF;
-  --card:#0F1011; --ink:#F7F8F8; --ink2:#9A9FA8; --ink3:#62666D;
-  --sh:0 0 0 1px var(--line); --shS:0 0 0 1px var(--line);
+  --ink:#1E1E1E; --ink2:#323434; --ink3:#323434;
+  --t-white:#FFFFFF; --t-sage:#ABBAB9; --t-teal:#09AEA1; --t-pink:#F386A1; --t-magenta:#D45BB6;
+  --bg:var(--t-white); --hi:#F5505D; --win:#FEFEFE; --winG:#E5E5E5;
+  --sky1:var(--bg); --sky2:var(--bg); --sky3:var(--bg);
+  --blue:#1E1E1E; --blued:#1E1E1E; --blueL:#E5E5E5;
+  --grass:#1E1E1E; --grassL:#E5E5E5; --yel:#1E1E1E; --yelL:#E5E5E5; --yelD:#1E1E1E;
+  --red:#1E1E1E; --redL:#E5E5E5; --pur:#1E1E1E; --purL:#E5E5E5; --ora:#1E1E1E;
+  --card:var(--win);
+  --sh:3px 3px 0 rgba(30,30,30,.28); --shS:3px 3px 0 rgba(30,30,30,.28);
+  --mono:"JetBrains Mono","DotGothic16",ui-monospace,monospace;
+  --sans:"Inter Tight","Zen Kaku Gothic New","Helvetica Neue","Hiragino Sans",sans-serif;
 }
-body{
+body[data-tone="sage"]{--bg:var(--t-sage)} body[data-tone="teal"]{--bg:var(--t-teal)}
+body[data-tone="pink"]{--bg:var(--t-pink)} body[data-tone="magenta"]{--bg:var(--t-magenta)}
+body{background:var(--bg);font-family:var(--sans);color:var(--ink2);letter-spacing:-.01em;transition:background .25s}
+.cloud{display:none} #fx{display:none}
+body *{font-weight:400!important;border-radius:0!important}
+b,strong,.card .v,.goal .gt,.tdo .tt,.quote p,.bubble p,.callout .l2,.num .n,.rc .nm{font-weight:500!important}
+.big,.cover .ttl,.callout .l2{font-weight:600!important}
+
+/* 上のバー：白い札を並べる */
+.top{background:transparent;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.brand{font-family:var(--sans);font-size:17px;color:var(--ink);background:#fff;padding:5px 8px;letter-spacing:-.01em}
+.brand i{font-family:var(--mono);color:var(--ink2);font-size:11px;letter-spacing:.04em}
+.chap .b{height:2px;background:rgba(30,30,30,.25)}
+.chap .b.done{background:var(--ink)}
+.chap .b.on{background:var(--ink);box-shadow:none;transform:scaleY(3)}
+.stepn{font-family:var(--mono);color:var(--ink);background:#fff;padding:5px 8px;font-size:13px}
+.mute{background:#fff;filter:grayscale(1)}
+
+/* 四隅の印 */
+.step.on{position:relative;padding:26px 22px}
+.step.on::before{content:"";position:absolute;inset:0;pointer-events:none;
   background:
-    radial-gradient(1000px 560px at 80% -12%,color-mix(in srgb,var(--accFill) 26%,transparent),transparent 62%),
-    var(--bg);
-  background-attachment:fixed;
-  font-family:"Geist","Zen Kaku Gothic New","Hiragino Sans","Helvetica Neue",sans-serif;
-  letter-spacing:.01em;
-}
-.cloud{display:none}
-#fx{display:none}   /* 星の瞬きは出さない */
+    linear-gradient(var(--ink),var(--ink)) left top/9px 1px no-repeat,linear-gradient(var(--ink),var(--ink)) left top/1px 9px no-repeat,
+    linear-gradient(var(--ink),var(--ink)) right top/9px 1px no-repeat,linear-gradient(var(--ink),var(--ink)) right top/1px 9px no-repeat,
+    linear-gradient(var(--ink),var(--ink)) left bottom/9px 1px no-repeat,linear-gradient(var(--ink),var(--ink)) left bottom/1px 9px no-repeat,
+    linear-gradient(var(--ink),var(--ink)) right bottom/9px 1px no-repeat,linear-gradient(var(--ink),var(--ink)) right bottom/1px 9px no-repeat;
+  opacity:.55}
 
-/* ── 書体の太さ：基本 400、強調 500、大きい数字だけ 300 ──
-   !important で一括しているので、extra.css で太さを変えるときも !important が要る */
-body *{font-weight:400!important}
-b,strong,.brand,.btn,.pagetag,.cover .num,.card .k,.card .v,.goal .gt,.tdo .tt,.quote p,
-.bubble p,.bubble .tag,.who b,.rc .nm,.pill,.tdo .lk{font-weight:500!important}
-.big,.cover .ttl,.callout .l2{font-weight:500!important;letter-spacing:-.035em}
-.num .n{font-weight:300!important;letter-spacing:-.05em}
+/* 章の扉と見出し：巨大・詰める・中央 */
+.cover{text-align:center;padding-block:10px 18px}
+.cover .num{display:inline-block;font-family:var(--mono);font-size:clamp(13px,1.8vw,17px);line-height:1.5;letter-spacing:0;
+  color:#fff;background:var(--ink);padding:3px 9px;text-shadow:none;animation:none;box-shadow:none;border:0}
+.cover .ttl{font-size:clamp(56px,13vw,150px);line-height:.92;letter-spacing:-.055em;color:var(--ink2);margin-top:20px}
+.cover .sub{font-family:var(--mono);font-size:15px;color:var(--ink2);margin-top:26px;text-wrap:balance}
+.pagetag{display:table;margin:0 auto 18px;background:var(--ink);color:#fff;box-shadow:none;padding:3px 9px;
+  font-family:var(--mono);font-size:14px;letter-spacing:0;white-space:normal;text-align:center}
+.big{text-align:center;color:var(--ink2);font-size:clamp(38px,8.4vw,72px);line-height:1.06;letter-spacing:-.05em;margin:0 0 30px}
+.big em,.big .o,.big .mark,.big .r,.big .no{color:var(--ink2);text-shadow:none;
+  text-decoration:underline;text-decoration-thickness:.055em;text-underline-offset:.13em}
+.say{color:var(--ink2);margin-inline:auto;text-align:center;max-width:none} .say b{color:var(--ink)}
+.tiny{font-family:var(--mono);font-size:13.5px;color:var(--ink2);line-height:1.7} .tiny a{color:var(--ink)}
 
-/* ── 上のバー ── */
-.top{background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line);border-radius:0;box-shadow:none}
-.brand{font-family:"Geist","Zen Kaku Gothic New",sans-serif;font-size:17px;letter-spacing:-.01em;color:#fff}
-.brand i{font-family:"Geist",sans-serif;color:var(--ink3)}
-.chap .b{height:3px;background:var(--line2);border-radius:2px}
-.chap .b.done{background:#fff}
-.chap .b.on{background:var(--acc);box-shadow:none;transform:none}
-.stepn{color:var(--ink3);font-family:"Geist",sans-serif}
-.mute{background:transparent;filter:grayscale(1) brightness(1.6);opacity:.7}
+/* 箱＝窓 */
+.card,.num,.goal,.tdo,.panel,.rc,.bubble{background:var(--win);border:1px solid var(--ink);box-shadow:var(--sh);animation:none}
+.card{padding:0 0 14px;overflow:hidden}
+.card .k{display:block;background:var(--ink);color:#fff;font-family:var(--mono);font-size:13.5px;letter-spacing:0;
+  padding:3px 9px;margin:0 0 12px}
+.card .v,.card .d{padding-inline:12px}
+.card .v{color:var(--ink);letter-spacing:-.03em;line-height:1.2}
+.card .d{font-family:var(--mono);font-size:14.5px;color:var(--ink2)}
+.num{padding:12px 14px}
+.num .n{color:var(--ink);letter-spacing:-.06em}
+.num.ok .n,.num.dn .n,.num.st .n{color:var(--ink)} .num.dn{background:var(--winG)} .num.dn .n{opacity:.45}
+.num .l{font-family:var(--mono);font-size:14px;color:var(--ink2)}
+.goal .medal,.tdo .no,.who .av,.rc .av{background:var(--ink)!important;color:#fff;box-shadow:none;animation:none;
+  font-family:var(--mono);width:38px;height:38px;font-size:17px}
+.goal .gt,.tdo .tt{color:var(--ink);letter-spacing:-.03em}
+.goal .gd,.tdo .td{font-family:var(--mono);font-size:14.5px;color:var(--ink2)}
+.tdo .lk{background:var(--ink)}
+/* 本文の引用とメモ：箱にしない。左に細い線 */
+.quote,.memo{background:none;box-shadow:none;border:0;border-left:1px solid var(--ink);padding:4px 0 4px 14px;color:var(--ink2);animation:none}
+.quote p{color:var(--ink)} .quote cite{font-family:var(--mono);font-size:13.5px;color:var(--ink2)}
+.memo b{color:#fff;background:var(--hi);padding:0 .2em}
+.pill,.pill.no,.pill.yes{background:#fff;color:var(--ink);font-family:var(--mono)}
+.rule{background:var(--ink);height:1px}
+.entrust,.fact{background:var(--winG);color:var(--ink)}
 
-/* ── 章の扉：左寄せ。num は小さな肩書き、ttl が主役 ── */
-.cover{text-align:left;padding-block:10px 18px}
-.cover .num{font-family:"Geist","Zen Kaku Gothic New",sans-serif;letter-spacing:.02em;
-  font-size:clamp(20px,3vw,26px);line-height:1.2;color:var(--acc);text-shadow:none;animation:none;
-  background:none;box-shadow:none;border:0;padding:0;border-radius:0;display:block;text-wrap:balance}
-.cover .ttl{line-height:1.08;font-size:clamp(46px,11vw,104px);margin-top:14px;color:#fff}
-.cover .sub{color:var(--ink2);margin-top:18px;text-wrap:balance}
-
-/* ── ラベルと見出し ── */
-.pagetag{background:transparent;box-shadow:none;padding:0;border-radius:0;color:var(--ink3);
-  letter-spacing:.02em;margin-bottom:18px;white-space:normal}
-.pagetag::before{content:"";display:inline-block;width:18px;height:2px;background:var(--acc);
-  vertical-align:middle;margin-right:10px}
-.big{line-height:1.16;color:#fff;margin-bottom:22px}
-.big em,.big .o,.big .mark,.big .r,.big .no{color:var(--acc);text-shadow:none}
-.say{color:var(--ink2)} .say b{color:#fff}
-.tiny{color:var(--ink3)} .tiny a{color:var(--acc)}
-
-/* ── 箱：平たく、細い線で ── */
-.card,.num,.quote,.memo,.goal,.tdo,.panel,.who,.rc{border-radius:14px}
-.card .k{background:none;padding:0;color:var(--acc);letter-spacing:.08em;margin-bottom:8px}
-.card .v{color:#fff;letter-spacing:-.02em}
-.num .n{color:#fff}
-.num.ok .n{color:#F7F8F8} .num.dn .n,.num.st .n{color:var(--mute)}   /* 良い=白、悪い=グレー */
-.quote{border-left:2px solid var(--acc)} .quote p{color:#fff}
-.memo{border-left:2px solid var(--acc)} .memo b{color:#fff}
-.goal .medal,.tdo .no,.who .av,.rc .av{background:transparent!important;border:1.5px solid var(--line2);color:#fff;
-  box-shadow:none;animation:none;font-family:"Geist",sans-serif}
-.goal .gt,.tdo .tt{color:#fff;letter-spacing:-.01em}
-.tdo .lk{background:var(--accFill)}
-.pill,.pill.no,.pill.yes{background:#16181D;color:var(--ink2);box-shadow:0 0 0 1px var(--line)}
-.pill.yes{color:#fff}
-.rule{background:var(--line);height:1px}
-.rc.lead{box-shadow:0 0 0 1px var(--accFill)}
-.rc .nm{color:#fff} .rc li b{color:#fff}
-.entrust{background:#16181D;color:#fff;border-radius:12px}
-.fact{background:#16181D;color:var(--acc);border-radius:12px}
-
-/* ── 問いかけと締め ── */
-.bubble{background:var(--card);color:#fff;border-radius:14px;box-shadow:0 0 0 1px var(--accFill);animation:none}
+/* 問いかけ＝窓、締め＝下線つきの大きな字 */
+.bubble{color:var(--ink);padding:0 0 14px}
 .bubble::before{display:none}
-.bubble .tag{background:none;padding:0;color:var(--acc);letter-spacing:.08em}
-.bubble ul{color:var(--ink2)}
-.callout,.together{background:none;box-shadow:none;border-top:1px solid var(--line);border-radius:0;color:#fff;
-  text-align:left;padding:28px 0 0;animation:none}
-.callout .l1{color:var(--ink2)}
-.callout .l2{font-size:clamp(34px,8vw,72px);line-height:1.15}
+.bubble .tag{display:block;background:var(--ink);color:#fff;font-family:var(--mono);font-size:13.5px;padding:3px 9px;margin:0 0 12px}
+.bubble p,.bubble ul{padding-inline:14px} .bubble ul{font-family:var(--mono);font-size:15px;color:var(--ink2);padding-left:2.2em}
+.callout,.together{background:none;box-shadow:none;color:var(--ink2);text-align:center;padding:26px 0 0;animation:none}
+.callout .l1{font-family:var(--mono);font-size:15px}
+.callout .l2{display:inline-block;font-size:clamp(36px,8vw,84px);line-height:1;letter-spacing:-.05em;
+  border-bottom:3px solid var(--ink2);padding-bottom:.08em}
 
-/* ── 下の操作：白い面は「つぎへ」だけ ── */
-.guide{background:linear-gradient(to top,var(--bg) 58%,color-mix(in srgb,var(--bg) 88%,transparent) 82%,transparent)}
-.btn{background:#14161B;color:#fff;box-shadow:0 0 0 1px var(--line2);border-radius:12px}
-.btn:active{box-shadow:0 0 0 1px var(--line2)}
-.btn.go{background:#fff;color:#000;box-shadow:none;animation:none}
+/* 下の操作：白い札と、黒い「つぎへ」 */
+.guide{background:linear-gradient(to top,var(--bg) 62%,transparent)}
+.btn{background:#fff;color:var(--ink);box-shadow:none;font-family:var(--sans)}
+.btn:active{box-shadow:none}
+.btn.go{background:var(--ink);color:#fff;box-shadow:none;animation:none}
 .btn.go:active{box-shadow:none}
-.gbtn{background:#14161B;box-shadow:0 0 0 1px var(--line2)}
-.gbtn .badge{background:var(--accFill);color:#fff;box-shadow:none;animation:none}
-.charSm,.gbtn .face{animation:none}
-/* 黒地でキャラクターが沈まないよう、細い白の縁と差し色の光を足す */
-.char{filter:drop-shadow(0 0 1px rgba(255,255,255,.75))
-             drop-shadow(0 0 22px color-mix(in srgb,var(--accFill) 55%,transparent))}
+.gbtn{background:#fff;box-shadow:0 0 0 1px var(--ink);overflow:hidden}
+.gbtn .badge{background:var(--ink);color:#fff;box-shadow:none;animation:none;font-family:var(--mono)}
+.gbtn .face{background:var(--ink);color:#fff;animation:none} .charSm{animation:none}
+.char{filter:drop-shadow(4px 4px 0 rgba(30,30,30,.35))}
 
-/* ── 解説の面：背景より一段明るい半透明のグレー（すりガラス） ── */
-.talk{
-  background:rgba(30,32,38,.78);
-  -webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%);
-  box-shadow:0 0 0 1px rgba(255,255,255,.10),inset 0 1px 0 rgba(255,255,255,.10),0 24px 60px rgba(0,0,0,.55);
-  border-radius:16px;padding:20px 24px;
-  scrollbar-width:thin;scrollbar-color:#3A3D45 transparent}
+/* 解説の面＝「NOTE」という名前の窓 */
+.talk{background:var(--winG);border:1px solid var(--ink);box-shadow:var(--sh);padding:0 0 14px}
 .talk::after{display:none}
-.talk::-webkit-scrollbar{width:6px}
-.talk::-webkit-scrollbar-thumb{background:#3A3D45;border-radius:6px}
-.talk .t{color:#B4B8C0;font-size:19px;line-height:1.8}
-.talk .t b{color:#fff}
-.talk .t::before{content:"NOTE";display:block;font-family:"Geist",sans-serif;font-size:12px;letter-spacing:.18em;
-  color:var(--acc);margin-bottom:8px}
-@media(min-width:700px){.talk .t{font-size:22px}}
-.gbtn .face{background:#14161B;color:var(--acc)}
+.talk .t{color:var(--ink2);font-size:19px;line-height:1.6;padding:0 14px}
+.talk .t b{color:var(--ink)}
+.talk .t::before{content:"Note 1.1";display:block;background:var(--ink);color:#fff;font-family:var(--mono);font-size:13.5px;
+  padding:3px 9px;margin:0 -14px 12px}
+
+@media(min-width:700px){
+  .pagetag{font-size:16px} .cover .sub{font-size:18px} .tiny{font-size:15px}
+  .card .k,.bubble .tag{font-size:14.5px} .card .d,.goal .gd,.tdo .td,.num .l{font-size:16.5px}
+  .card .v{font-size:30px} .goal .gt,.tdo .tt{font-size:28px}
+  .memo{font-size:22px} .talk .t{font-size:21px} .bubble ul{font-size:17px}
+}
+.big *,.cover .ttl *,.callout .l2 *{font-weight:inherit!important}
+
+/* 選んだもの・押したものは紫紅になる（手本の ::selection と同じ色）。紫紅の背景の上では桃色にする */
+::selection{background:var(--t-magenta);color:var(--ink)}
+body[data-tone="magenta"] ::selection{background:var(--t-pink)}
+.btn:not([disabled]):hover,.btn:not([disabled]):active,.gbtn:hover,.gbtn[aria-expanded="true"],.mute:hover,
+a.tdo:hover{background:var(--t-magenta);color:var(--ink)}
+.btn.go:not([disabled]):hover,.btn.go:not([disabled]):active{background:var(--t-magenta);color:var(--ink)}
+.chap .b:hover{background:var(--t-magenta)}
+body[data-tone="magenta"] .btn:not([disabled]):hover,body[data-tone="magenta"] .btn:not([disabled]):active,
+body[data-tone="magenta"] .gbtn:hover,body[data-tone="magenta"] .gbtn[aria-expanded="true"],
+body[data-tone="magenta"] .chap .b:hover{background:var(--t-pink)}
+/* キャラクターなし（guide を省いたとき）：飛び出す絵の場所を出さない */
+.charwrap:has(img:not([src])),.charwrap:has(img[src=""]){display:none}
+.gbtn:hover .face,.gbtn[aria-expanded="true"] .face{background:var(--t-magenta);color:var(--ink);filter:none}
+body[data-tone="magenta"] .gbtn:hover .face,body[data-tone="magenta"] .gbtn[aria-expanded="true"] .face{background:var(--t-pink)}
+/* 扉の題名は折り返さない。--n（字数）があれば、幅に収まる大きさまで自動で縮む */
+.cover .ttl{white-space:nowrap;
+  font-size:min(clamp(56px,13vw,150px),calc((min(100vw,880px) - 100px) / var(--n,6)))}
+/* 扉では上のラベルを出さない（扉の肩書きと同じ役目の札が2つ並ぶため） */
+body:has(.step.on .cover) .pagetag{display:none}

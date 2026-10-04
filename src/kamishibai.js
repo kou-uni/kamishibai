@@ -230,6 +230,13 @@ function init(cfg){
     ? `<div class="cover"><div class="num">${esc(s.cover.num)}</div><div class="ttl">${esc(s.cover.title)}</div>${s.cover.sub?`<div class="sub">${esc(s.cover.sub)}</div>`:''}</div>`
     : (s.html || '');
   stage.innerHTML = S.map((s,i) => `<div class="step" id="k-st${i}">${body(s)}</div>`).join('');
+  /* 扉の題名の字数を CSS に渡す（英数字は0.58字ぶん）。テーマ側で「1行に収まる大きさ」を決めるのに使う */
+  stage.querySelectorAll('.cover .ttl').forEach(el => {
+    const n = [...el.textContent].reduce((w, c) => w + (/[\x20-\x7e]/.test(c) ? 0.58 : 1), 0);
+    el.style.setProperty('--n', n.toFixed(2));
+  });
+  /* 章ごとの色面。tones:['white','sage',…] を章の順に。足りなければ繰り返す */
+  const TONES = cfg.tones || (cfg.theme === 'cool' ? ['white','sage','pink','teal','magenta'] : null);
 
   chapsEl.innerHTML = CH.map((nm, ci) => {
     const n = S.filter(s => (s.ch|0) === ci).length;
@@ -252,6 +259,8 @@ function init(cfg){
   }
   function go(i){
     cur = Math.max(0, Math.min(S.length - 1, i));
+    document.body.dataset.ch = S[cur].ch|0;
+    if(TONES) document.body.dataset.tone = TONES[(S[cur].ch|0) % TONES.length];
     document.querySelectorAll('.step').forEach((el, j) => el.classList.toggle('on', j === cur));
     chapsEl.querySelectorAll('[data-g]').forEach(b => {
       const g = +b.dataset.g; b.classList.toggle('on', g === cur); b.classList.toggle('done', g < cur);

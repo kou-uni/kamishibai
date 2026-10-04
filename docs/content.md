@@ -4,7 +4,8 @@
 
 ```js
 const CONTENT = {
-  theme:    'cool',                                 // 省略可。黒背景のトーン（docs/themes.md）
+  theme:    'cool',                                 // 省略可。色面と窓のトーン（docs/themes.md）
+  tones:    ['white','sage','teal'],                // 省略可。章ごとの背景色（theme:'cool' で使う）
   brand:    { name:'紙芝居', sub:'KAMISHIBAI' },   // 左上の名前
   guide:    { still:'@@assets/guide.png@@',        // 飛び出す絵（背景を抜いたPNG）
               face: '@@assets/guide-face.png@@',    // 丸ボタン用の静止画（省略可）
