@@ -1,59 +1,53 @@
-/* theme:'cool' の見本。黒背景・細い書体・差し色1つ。
-   ふつうの example.js との違いは theme の1行と、labels を英字にしていることだけ。 */
+/* theme:'cool' の見本。ベタ塗りの色面・巨大な見出し・古い OS の窓。
+   ふつうの example.js との違いは theme と tones の2行と、labels を英字にしていることだけ。 */
 const CONTENT = {
   theme: 'cool',
+  tones: ['white', 'sage', 'teal', 'pink'],   // 章ごとの背景色。省くと 白→灰緑→桃→青緑→紫紅 の順に回る
   brand: { name: '紙芝居', sub: 'COOL THEME' },
-  sound: true,                       // theme:'cool' では、低く短い音（'cool'）が既定になる
-  chapters: ['序', '型', '終'],
-  labels: { next: 'Next →', prev: 'Back', start: 'Start →', end: 'Fin' },
+  sound: true,                                 // theme:'cool' では、低く短い音（'cool'）が既定になる
+  chapters: ['序', '色', '窓', '終'],
+  labels: { next: 'Next', prev: 'Back', start: 'Start', end: 'Fin' },
 
   steps: [
     { ch: 0, tag: 'はじめに',
-      cover: { num: 'kamishibai ／ theme: cool', title: '黒で、静かに。', sub: '同じ部品のまま、トーンだけを替える。' },
+      cover: { num: 'kamishibai ／ theme: cool', title: '色面と、窓。', sub: 'Session 0 ・ 同じ部品のまま、トーンだけを替える。' },
       talk: `<b>これは theme:'cool' の見本です。</b>
-             content に1行足すだけで、同じ部品が黒背景のトーンに変わります。` },
+             content に1行足すだけで、同じ部品がこのトーンに変わります。` },
 
-    { ch: 1, tag: '決まりは4つ',
-      talk: `<b>このトーンの決まりは4つです。</b>
-             色を増やさない、面を白くしない、白は押すものだけ、書体は細く。
-             守ると、何を足しても同じ顔になります。`,
-      html: K.head('色は、<br><em>ひとつだけ。</em>') +
+    { ch: 1, tag: '章ごとに、背景が替わる',
+      talk: `<b>背景は1色のベタ塗りで、章が変わると色も変わります。</b>
+             文字は墨色1色のままです。色で強調しないので、背景が何色でも読めます。`,
+      html: K.head('背景は、<br><em>1色のベタ塗り。</em>') +
             K.goals([
-              { title: '黒・白・グレーと、差し色1つ', body: '緑と赤は使わない' },
-              { title: '面は白くしない', body: '背景より少し明るいグレーと、細い線で分ける' },
-              { title: '白い面は「押すもの」だけ', body: 'Next ボタン' },
-              { title: '書体は細く', body: '太字は 500 まで。動き続ける演出は止める' },
-            ]) },
+              { title: '色面は5つ', body: 'white / sage / teal / pink / magenta' },
+              { title: '文字は墨色だけ', body: '色で強調しない' },
+              { title: 'グラデーションは使わない', body: '影も、ぼかしも' },
+            ]) +
+            K.memo('本文の強調は、<b>朱色のマーカー</b>で。') },
 
-    { ch: 1, tag: '数字は、良いほうを白に',
-      talk: `<b>良い・悪いを緑と赤で分けません。</b>
-             良いほうを白、悪いほうをグレーにします。差し色は、いちばん見てほしい1箇所に取っておきます。`,
-      html: K.head('良いは白、<br><em>悪いはグレー。</em>') +
+    { ch: 2, tag: '箱は、古い OS の窓',
+      talk: `<b>カードも、数字も、この解説の面も、同じ「窓」です。</b>
+             角は直角、黒い線が1本、黒いタイトルバーに等幅の白い字、右下に硬い影。`,
+      html: K.head('箱は、<br><em>ぜんぶ窓。</em>') +
             K.nums([
               { n: '31%', label: '前（tone: dn）', tone: 'dn' },
               { n: '92%', label: '後（tone: ok）', tone: 'ok' },
             ]) +
             K.cards([
-              { k: 'CARD', v: 'ラベルは差し色', d: '値は白、説明はグレー' },
-              { k: 'CARD', v: '影は使わない', d: '細い線1本で囲む' },
+              { k: 'Window 1.0', v: 'ラベルがタイトルバー', d: '黒地に等幅の白文字' },
+              { k: 'Window 1.1', v: '角は直角', d: '線は 1px、影は硬く' },
             ]) +
-            K.memo('強調は<b>白い文字</b>で。色を足さない。') },
+            K.quote('引用とメモは箱にしない。左に細い線を1本。', 'theme: cool の決まり 4') },
 
-    { ch: 1, tag: '解説は、すりガラスの面に',
-      talk: `<b>いま開いているこの面が、解説の面です。</b>
-             背景より一段明るい半透明のグレーで、後ろがぼけて透けます。
-             白い面にすると Next ボタンと競るので、白は押すものにだけ使います。`,
-      html: K.head('左下を、<br><em>押してみて。</em>') +
-            K.quote('面は色で分けない。線と、ぼかしで分ける。', 'theme: cool の決まり 2') +
-            K.ask('ASK', '<b>問いかけは、差し色の細い枠で。</b>', ['黄色い吹き出しは使わない', '揺らさない']) },
-
-    { ch: 2, tag: 'つかいかた',
-      talk: `<b>使いかたは1行です。</b>差し色を変えたいときは、extra.css で2つの変数を上書きします。`,
-      html: K.head('足すのは、<br><em>1行だけ。</em>') +
+    { ch: 3, tag: 'つかいかた',
+      talk: `<b>足すのは2行です。</b>theme で型を選び、tones で章ごとの色を決めます。
+             選んだ文字や、マウスを乗せたボタンは紫紅になります。`,
+      html: K.head('足すのは、<br><em>2行だけ。</em>') +
             K.todo([
-              { title: "theme: 'cool'", body: 'content の先頭に書く。書体と音も一緒に切り替わる。' },
-              { title: '差し色を変える', body: '<code>:root{--acc:#…; --accFill:#…}</code> を extra.css に。' },
+              { title: "theme: 'cool'", body: '書体と音も一緒に切り替わる。' },
+              { title: "tones: ['white','sage',…]", body: '章の順に背景色を並べる。省いてもよい。' },
             ]) +
+            K.ask('Ask 1.0', '<b>問いかけも、窓で。</b>', ['黄色い吹き出しは使わない']) +
             K.callout('<div class="l1">同じ部品で、</div><div class="l2">トーンだけ替える。</div>') },
   ],
 };
