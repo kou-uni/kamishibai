@@ -42,8 +42,7 @@ Node さえあれば動きます（依存パッケージ 0）。できた `dist/
   ch: 1,                        // 何章目か（上のバーの区切り）
   tag: '市場は大きい',           // 左上の見出し。このページで何を伝えたいか
   talk: `<b>ここが解説です。</b>主語のある文章で書きます。`,
-  html: K.sys('前提①') +
-        K.head('切り抜きは、<em>すでに経済圏。</em>') +
+  html: K.head('切り抜きは、<br><em>すでに経済圏。</em>') +
         K.cards([{ k:'規模', v:'1,050億円', d:'国内VTuber市場（2024年度）' }]),
 }
 ```
@@ -66,8 +65,8 @@ Node さえあれば動きます（依存パッケージ 0）。できた `dist/
 |---|---|
 | `K.head(html)` | 大見出し。`<em>` で青、`<span class="o">` で橙、`<span class="r">` で赤の縁取り |
 | `K.lead(html)` / `K.tiny(html)` | 本文 / 小さい注記 |
-| `K.who({name,initial,color,note})` | 誰の視点かを示す札 |
-| `K.sys(text)` | 人ではなく仕組みの説明 |
+| `K.who({name,initial,color,note})` | 誰の視点かを示す札。**画面ごとに語り手が変わるときだけ** |
+| `K.sys(text)` | 人ではなく仕組みの説明。`tag` と同じ役目になるので、ふつうは使わない |
 | `K.cards([{k,v,d,color}])` | 横に並ぶカード。順に跳ねて出ます |
 | `K.nums([{count,label,tone}])` | 大きい数字。`count` でカウントアップ |
 | `K.ask(tag, question, items)` | 黄色い吹き出し。相手に考えてほしいところ |
