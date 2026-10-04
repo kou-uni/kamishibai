@@ -59,7 +59,7 @@ main{flex:1;max-width:880px;width:100%;margin:0 auto;padding:0 18px;
   color:#fff;text-shadow:0 8px 0 var(--blue),0 16px 30px rgba(23,58,84,.25);animation:bob 3s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-16px) rotate(1.5deg)}}
 .cover .ttl{font-weight:900;font-size:clamp(34px,9vw,54px);margin-top:6px;color:var(--blued)}
-.cover .sub{color:var(--ink2);margin-top:10px;font-size:17px}
+.cover .sub{color:var(--ink2);margin-top:10px;font-size:20px}
 
 /* ===== 人物札 ===== */
 .who{display:inline-flex;align-items:center;gap:11px;padding:7px 20px 7px 7px;border-radius:99px;
@@ -69,26 +69,28 @@ main{flex:1;max-width:880px;width:100%;margin:0 auto;padding:0 18px;
   box-shadow:inset 0 -3px 0 rgba(0,0,0,.14)}
 @keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 .who b{font-weight:900;flex:none;font-size:17px}
-.who span{color:var(--ink3);font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who span{color:var(--ink2);font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ===== 見出し ===== */
 .big{font-weight:900;line-height:1.36;font-size:clamp(32px,8.4vw,54px);margin:0 0 16px;
   text-wrap:balance;color:var(--blued);letter-spacing:-.01em}
 .big em{font-style:normal;color:#fff;-webkit-text-stroke:0;text-shadow:0 4px 0 var(--blue),0 8px 16px rgba(23,58,84,.2)}
 .big .o,.big .mark{font-style:normal;color:#fff;text-shadow:0 4px 0 var(--ora),0 8px 16px rgba(23,58,84,.2)}
+/* 強調した句は途中で折らない（入りきらないときだけ中で折れる） */
+.big em,.big .o,.big .mark,.big .r,.big .no{display:inline-block}
 .big .r,.big .no{font-style:normal;color:#fff;text-shadow:0 4px 0 var(--red),0 8px 16px rgba(23,58,84,.2)}
 .say{font-size:clamp(16px,3.2vw,19px);color:var(--ink2);margin:0 0 22px;max-width:34ch;text-wrap:balance}
 .say b{color:var(--ink);font-weight:900}
-.tiny{font-size:14.5px;color:var(--ink2);line-height:1.8}
+.tiny{font-size:18px;color:var(--ink2);line-height:1.7}
 
 /* ===== カード ===== */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
 .card{background:var(--card);border-radius:26px;padding:20px 19px;box-shadow:var(--sh);
   animation:bg .6s cubic-bezier(.2,1.6,.4,1) both}
-.card .k{font-size:13px;letter-spacing:.06em;color:#fff;font-weight:900;margin-bottom:10px;
+.card .k{font-size:14.5px;letter-spacing:.06em;color:#fff;font-weight:900;margin-bottom:10px;
   background:var(--blue);display:inline-block;padding:3px 13px;border-radius:99px}
 .card .v{font-weight:900;font-size:23px;line-height:1.4;color:var(--blued)}
-.card .d{font-size:15px;color:var(--ink2);margin-top:8px;line-height:1.75;font-weight:700}
+.card .d{font-size:18px;color:var(--ink2);margin-top:8px;line-height:1.6;font-weight:700}
 @keyframes bg{from{opacity:0;transform:translateY(26px) scale(.86)}to{opacity:1;transform:none}}
 .step.on .card:nth-child(1){animation-delay:.08s} .step.on .card:nth-child(2){animation-delay:.2s}
 .step.on .card:nth-child(3){animation-delay:.32s} .step.on .card:nth-child(4){animation-delay:.44s}
@@ -98,7 +100,7 @@ main{flex:1;max-width:880px;width:100%;margin:0 auto;padding:0 18px;
   border-left:9px solid var(--red);animation:bg .55s cubic-bezier(.2,1.5,.4,1) both}
 .quote:nth-of-type(2){animation-delay:.16s;border-left-color:var(--ora)}
 .quote p{margin:0;font-size:19px;font-weight:900;line-height:1.7;color:var(--ink)}
-.quote cite{display:block;font-style:normal;font-size:13.5px;color:var(--ink3);margin-top:9px;font-weight:700}
+.quote cite{display:block;font-style:normal;font-size:16.5px;color:var(--ink2);margin-top:9px;font-weight:700}
 
 /* ===== 数 ===== */
 .nums{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 22px}
@@ -107,7 +109,7 @@ main{flex:1;max-width:880px;width:100%;margin:0 auto;padding:0 18px;
 .num:nth-child(2){animation-delay:.13s} .num:nth-child(3){animation-delay:.26s}
 .num .n{font-weight:900;font-size:clamp(34px,8.6vw,60px);line-height:1.05;font-variant-numeric:tabular-nums;color:var(--blue)}
 .num .u{font-size:19px;margin-left:2px;font-weight:900}
-.num .l{font-size:13.5px;color:var(--ink2);margin-top:4px;line-height:1.55}
+.num .l{font-size:17px;color:var(--ink2);margin-top:4px;line-height:1.5}
 .num.ok .n{color:var(--grass)} .num.st .n{color:var(--ora)} .num.dn .n{color:var(--red)}
 
 /* ===== 関係図 ===== */
@@ -119,10 +121,10 @@ main{flex:1;max-width:880px;width:100%;margin:0 auto;padding:0 18px;
 @keyframes fy{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-11px) rotate(.6deg)}}
 .bubble::before{content:"";position:absolute;top:-14px;left:36px;
   border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:16px solid var(--yel)}
-.bubble .tag{display:inline-block;font-size:13px;background:rgba(74,50,0,.16);
+.bubble .tag{display:inline-block;font-size:15px;background:rgba(74,50,0,.16);
   border-radius:99px;padding:3px 14px;margin-bottom:10px}
-.bubble p{margin:0;font-size:20px;line-height:1.65;text-wrap:balance}
-.bubble ul{margin:12px 0 0;padding-left:1.15em;font-size:15.5px;line-height:1.8}
+.bubble p{margin:0;font-size:21px;line-height:1.65;text-wrap:balance}
+.bubble ul{margin:12px 0 0;padding-left:1.15em;font-size:19px;line-height:1.7}
 .bubble li{margin-bottom:5px}
 
 /* ===== ガイド（下部チュートリアル） ===== */
@@ -193,7 +195,7 @@ main{flex:1;max-width:880px;width:100%;margin:0 auto;padding:0 18px;
 .btn:focus-visible{outline:4px solid var(--yel);outline-offset:3px}
 .btn[disabled]{opacity:.4;cursor:not-allowed;animation:none}
 .pagetag{align-self:flex-start;max-width:100%;
-  font-size:16px;font-weight:900;color:var(--blued);background:var(--card);
+  font-size:17px;font-weight:900;color:var(--blued);background:var(--card);
   padding:9px 20px;border-radius:99px;box-shadow:var(--shS);margin-bottom:14px;
   animation:tagin .45s cubic-bezier(.2,1.5,.4,1) both;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -204,7 +206,7 @@ main{flex:1;max-width:880px;width:100%;margin:0 auto;padding:0 18px;
 .pill.no{background:var(--redL);color:#C43D3D}
 .pill.yes{background:var(--grassL);color:#2E8C42}
 .memo{margin-top:22px;padding:18px 20px;background:var(--card);border-radius:24px;
-  box-shadow:var(--shS);font-size:15.5px;color:var(--ink2);line-height:1.85;border-left:9px solid var(--blue)}
+  box-shadow:var(--shS);font-size:20px;color:var(--ink2);line-height:1.7;border-left:9px solid var(--blue)}
 .memo b{color:var(--blued);font-weight:900}
 .rule{height:3px;background:rgba(23,58,84,.12);border-radius:3px;margin:24px 0}
 
@@ -251,8 +253,8 @@ a.tdo:active{transform:translateY(4px) scale(.98,.96);box-shadow:var(--shS)}
 .tdo .no{width:40px;height:40px;border-radius:99px;flex:none;display:grid;place-items:center;
   font-weight:900;font-size:19px;color:#fff;background:var(--blue);
   box-shadow:inset 0 -3px 0 rgba(0,0,0,.16)}
-.tdo .tt{font-size:18px;font-weight:900;color:var(--blued);line-height:1.4}
-.tdo .td{font-size:14.5px;color:var(--ink2);margin-top:5px;line-height:1.7}
+.tdo .tt{font-size:22px;font-weight:900;color:var(--blued);line-height:1.4}
+.tdo .td{font-size:19px;color:var(--ink2);margin-top:5px;line-height:1.6}
 .tdo .lk{display:inline-block;margin-top:8px;font-size:14px;font-weight:900;color:#fff;
   background:var(--blue);padding:6px 16px;border-radius:99px;word-break:break-all}
 .tdo .lk.g{background:var(--grass)} .tdo .lk.p{background:var(--pur)}
@@ -265,8 +267,8 @@ a.tdo:active{transform:translateY(4px) scale(.98,.96);box-shadow:var(--shS)}
 .goal .medal{width:52px;height:52px;border-radius:99px;flex:none;display:grid;place-items:center;
   font-size:25px;font-weight:900;color:#fff;box-shadow:inset 0 -4px 0 rgba(0,0,0,.16);
   animation:pu 2.5s ease-in-out infinite}
-.goal .gt{font-size:21px;font-weight:900;color:var(--blued);line-height:1.4}
-.goal .gd{font-size:15.5px;color:var(--ink2);margin-top:6px;line-height:1.75}
+.goal .gt{font-size:24px;font-weight:900;color:var(--blued);line-height:1.4}
+.goal .gd{font-size:20px;color:var(--ink2);margin-top:6px;line-height:1.6}
 .goal .gd b{color:var(--ink);font-weight:900}
 .callout{margin-top:22px;background:linear-gradient(160deg,#FFD84D,var(--yel));border-radius:30px;
   padding:28px 22px;text-align:center;color:#4A3200;
@@ -275,4 +277,20 @@ a.tdo:active{transform:translateY(4px) scale(.98,.96);box-shadow:var(--shS)}
 .callout .l2{font-size:clamp(28px,7.6vw,44px);font-weight:900;line-height:1.35;margin-top:10px}
 .spark{display:inline-block;animation:sp 1.5s ease-in-out infinite}
 @keyframes sp{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.25) rotate(12deg)}}
+/* 広い画面（PC・プロジェクター）では、本文と補足をもう一段大きくする。
+   会場の後ろの席から読めることを基準にしている。 */
+@media(min-width:700px){
+  .pagetag{font-size:22px}
+  .cover .sub{font-size:26px}
+  .say{font-size:25px;max-width:none}
+  .tiny{font-size:21px}
+  .cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .card .k{font-size:16px} .card .v{font-size:28px} .card .d{font-size:22px}
+  .num .l{font-size:21px}
+  .quote p{font-size:24px} .quote cite{font-size:20px}
+  .bubble .tag{font-size:18px} .bubble p{font-size:26px} .bubble ul{font-size:23px}
+  .memo{font-size:24px}
+  .tdo .tt{font-size:27px} .tdo .td{font-size:23px}
+  .goal .gt{font-size:30px} .goal .gd{font-size:24px}
+}
 @media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
